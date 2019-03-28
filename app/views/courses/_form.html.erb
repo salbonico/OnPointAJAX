@@ -1,0 +1,22 @@
+<% if @course.errors.any? %>
+  <div id="error_explanation">
+    <h2>
+      <%= pluralize(@course.errors.count, "error") %>
+      prohibited this course from being created:
+    </h2>
+    <ul>
+    <% @course.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_for @course do |f| %>
+  <%= f.label "Name" %>
+  <%= f.text_field :name %><br>
+  <%= f.label "Description" %>
+  <%= f.text_area :description %><br>
+  Teacher <%= f.collection_select :teacher_id, Teacher.all, :id, :name %><br>
+  <%= f.submit %>
+<% end %>

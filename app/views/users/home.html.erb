@@ -1,0 +1,38 @@
+<% if flash[:notice] %>
+    <div class="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<img src="<%= @user.image %>">
+<h1>Hello, <%= @user.name %>!</h1>
+    Email: <%= @user.email %> <br>
+
+<% if !isadmin? %>
+    <h2>Your Courses (<%=@user.enrollments.count %>)</h2>
+    <h3>Online Courses (<%=@online.count %>)</h3>
+    <% @online.each do |enrollment| %>
+        <% if enrollment.course_id_check %>
+	       <% course = Course.find(enrollment.course_id) %>
+            <b><h3><%= link_to course.name, course_path(course.id) %></h3></b>
+            Course Type: <b><%= enrollment.course_type %></b><br>
+            Teacher: <em><%= course.teacher_name %><br></em>
+            Description:<br> <%= course.description %><br>
+        	<%= button_to "Unenroll", unenroll_path(enrollment), :method => :delete %>
+        <% end %>
+    <% end %>
+
+    <h3>Classroom Courses (<%=@classroom.count %>)</h3>
+    <% @classroom.each do |enrollment| %>
+        <% if enrollment.course_id_check %>
+        	<% course = Course.find(enrollment.course_id) %>
+            <b><h3><%= link_to course.name, course_path(course.id) %></h3></b>
+            Course Type: <b><%= enrollment.course_type %></b><br>
+            Teacher: <em><%= course.teacher_name %><br></em>
+            Description:<br> <%= course.description %><br>
+            <%= button_to "Unenroll", unenroll_path(enrollment), :method => :delete %>
+        <% end %>
+    <% end %>
+<% end %>
+<br>
+<% if isadmin? %>
+    <%= button_to "User Admin", user_admin_path, :method => :get %>
+<% end %>

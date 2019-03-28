@@ -1,0 +1,8 @@
+<%= render 'validate'%>
+<%= form_for :user, url: "/users/#{@user.id}" do |f| %>
+  Username: <%= f.text_field :name %>
+  Password: <%= f.password_field :password %>
+  Email: <%= f.email_field :email %>
+  Admin: <%= f.check_box :admin, {}, "true", "false" %>
+  <%= f.submit %>
+<% end %>

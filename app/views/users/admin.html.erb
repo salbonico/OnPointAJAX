@@ -1,0 +1,10 @@
+<h3>Users (<%=@users.count %>)</h3>
+<% @users.each do |user| %>
+	<%= user.name %><br>
+	Email: <%= user.email %><br>
+	Admin?: <%= user.admin %><br>
+	<% if isadmin? %>
+		<%= button_to "Edit User", edit_user_path(user), :method => :get %>
+		<%= button_to "Delete User", delete_user_path(user), :method => :delete %><br>
+	<% end %>
+<% end %>

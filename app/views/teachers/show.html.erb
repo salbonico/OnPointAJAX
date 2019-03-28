@@ -1,0 +1,7 @@
+<h1><%= @teacher.name %></h1>
+<%= link_to "See all courses by #{@teacher.name}", teacher_courses_path(@teacher) %><br>
+<% if isadmin? %>
+	<%= link_to "Create a course by #{@teacher.name}", new_teacher_course_path(@teacher) %><br>
+	<%= button_to "Delete Teacher", @teacher, :method => :delete %>
+	<%= button_to "Edit Teacher", edit_teacher_path(@teacher), :method => :get %>
+<% end %>

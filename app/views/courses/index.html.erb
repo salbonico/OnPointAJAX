@@ -1,0 +1,48 @@
+<% if flash[:notice] %>
+    <div class="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<% if @enrollment.errors.any? %>
+  <div id="error_explanation">
+    <h2>
+      <%= pluralize(@enrollment.errors.count, "error") %>
+      prohibited enrollment in <%= @enrollment.course.name %>:
+    </h2>
+ 
+    <ul>
+    <% @enrollment.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<h1>Courses
+<% if params[:teacher_id] %>
+   by <%= @teacher.name %>
+<%end%></h1>
+<% if params[:teacher_id] && isadmin? %>
+	<%= link_to "Create a course by #{@teacher.name}", new_teacher_course_path(@teacher) %>
+<% end %>
+<ul>
+<% @courses.each do |course| %>
+  <%= link_to "#{course.name}", course_path(course),{ :class=>"course_name" } %><br>
+  <em><%= link_to "#{course.teacher_name}", teacher_courses_path(course.teacher_id_check) %></em><br>
+  <%= course.description %><br>
+  <% if isenrolled(course) == false && !isadmin? %> 
+  	<%= form_for @enrollment do |r| %>
+		   <%= r.hidden_field :user_id %>
+		   <%= r.hidden_field :course_id, :value => course.id %>
+		   Course Type: <%= radio_button_tag(:course_type, "classroom") %>Classroom
+		   <%= radio_button_tag(:course_type, "online", true) %>Online
+		   <br>
+		   <%= r.submit "Enroll in this course" %>
+		 <% end %>
+  <% end %>
+  <% if isenrolled(course) %>
+	 <%= button_to "Unenroll", unenroll_path(unenrollmentid(course)), :method => :delete%>
+  <% end %>
+<br>
+<% end %>
+</ul>

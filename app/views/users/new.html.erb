@@ -1,0 +1,13 @@
+<%= render 'validate'%>
+
+
+
+<%= form_for :user, url: '/users' do |f| %>
+  Username: <%= f.text_field :name %>
+  Password: <%= f.password_field :password %>
+  Email: <%= f.email_field :email %>
+  Admin: <%= f.check_box :admin, {}, "true", "false" %>
+  <%= f.submit "Sign Up" %>
+<% end %><br>
+Existing user log in: <button onclick='window.location.href="/login";'>Log in</button><br>
+<h2> <%= link_to('Log in with Facebook!', '/auth/facebook') %></h2>
