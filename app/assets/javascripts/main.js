@@ -25,7 +25,7 @@ function allCourses(){
 				
 			$("#course_name"+course.id).on('click', function(event){
 				event.preventDefault();
-				console.log(course.id)
+				showCourse(course.id)
 			})
 
 			$("#teacher_id"+course.id).on('click', function(event){
@@ -93,3 +93,34 @@ function attachEnroll(course){
 		        posting.done(attachUnenroll(course))
 	    	})
 }
+
+function showCourse(id){
+$.get("/courses/"+id+".json", function(data) {
+	console.log(data)
+	$("#title").text(data.name)
+	$('#courseList').empty()
+	$('#courseList').append("<h2>Teacher: "+data.teacher.name+"</h2>")
+	$('#courseList').append("<p>"+data.description+"</p>")
+	if (!isEnrolled(data.id)){
+		$('#courseList').append("<div id='coursetype"+ data.id +"'> <input type='radio' name='coursetype"+ data.id +"' value='classroom'> Classroom <input checked type='radio' name='coursetype"+ data.id +"' value='online'> Online<br><button id='Enroll"+ data.id +"'>Enroll</button><br></div>")
+		$("#Enroll"+data.id).on('click', function(event){
+				let ctype = $(`input[name="coursetype${data.id}"]:checked`).val()
+				let posting = $.post('/enrollments/new', {"course_type" : ctype, "course_id" : data.id});
+		        posting.done(attachUnenroll(data))
+	    	})}
+	    else{
+		$('#courseList').append("<button id='Unenroll"+ data.id +"'>Unenroll</button><br>")}
+		$("#Unenroll"+data.id).on('click', function(event){
+				let url = "/enrollments/"+enrollmentId(data.id)+"/unenroll"
+ 				$.ajax({
+	  				url : url,
+	  				type : 'DELETE',
+	  				complete : attachEnroll(data),
+					});
+			})
+})}
+
+
+
+
+
