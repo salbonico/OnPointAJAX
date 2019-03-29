@@ -10,6 +10,7 @@ class EnrollmentsController < ApplicationController
 	end
 
 	def destroy
+
 		enrollment = Enrollment.find(params[:id])
 
 		if session[:user_id] != enrollment.user_id
@@ -18,8 +19,7 @@ class EnrollmentsController < ApplicationController
 		else
 			course= Course.find(enrollment.course_id)
 			enrollment.destroy
-			flash[:notice] = "You have unenrolled from #{course.name}!"
-			redirect_to "/home"
+			render json: "success", status: 201
 		end
 	end
 end
