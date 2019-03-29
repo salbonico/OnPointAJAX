@@ -4,7 +4,7 @@ class EnrollmentsController < ApplicationController
 		user = User.find(session[:user_id])
 		@enrollment = Enrollment.new(:course_id => params[:course_id], :user_id => user.id, :course_type => params[:course_type])
 		@enrollment.save
-		
+		render json: @enrollment.to_json, status: 201
 		
 		
 	end
