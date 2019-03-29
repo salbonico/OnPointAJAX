@@ -22,3 +22,13 @@
 .course_name {
   font-size: 26px;
 }
+
+#courseList {
+	margin-left: 50px;
+}
+p{
+	margin-top: 0px;
+}
+.cdesc{
+	margin-top: -14px;
+}

@@ -30,6 +30,10 @@ class CoursesController < ApplicationController
 		@course = Course.find(params[:id])
 		@user = User.find(session["user_id"])
 		@enrollment = Enrollment.new(:course_id => @course.id, :user_id => @user.id)
+		respond_to do |format|
+      		format.html { render :show }
+      		format.json { render json: @course, status: 200 }
+  		end
 	end
 
 	def index
@@ -41,6 +45,13 @@ class CoursesController < ApplicationController
 		end
 		@user = User.find(session["user_id"])
 		@enrollment = Enrollment.new(:user_id => @user.id)
+		respond_to do |format|
+      		format.html { render :index }
+      		format.json { render json: @courses, status: 200 }
+  		end
+		#render :json => {:user => @user.to_json, :courses => @courses}
+
+
 	end
 
     def available

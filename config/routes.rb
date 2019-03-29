@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
+  get '/session' => 'sessions#show'
+  get '/ajax' => 'home#ajax', as: 'ajax_home'
   get '/admin' => 'users#admin', as: 'user_admin'
   get '/home' => 'users#home'
   get '/signup' => 'users#new'

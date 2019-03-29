@@ -15,7 +15,7 @@
    <button <%='hidden' if session["user_id"] == nil %> onclick='window.location.href="/home";'>Home</button>
    <button <%='hidden' if !isadmin? %> onclick='window.location.href="/teachers";'>All Teachers</button>
    <button <%='hidden' if !isadmin? %> onclick='window.location.href="/teachers/new";'>New Teacher</button>
-    <button <%='hidden' if session["user_id"] == nil %> onclick='window.location.href="/courses";'>All Courses</button>
+    <button id="allCourses"<%='hidden' if session["user_id"] == nil %> '>All Courses</button>
     <button <%='hidden' if !isadmin? %> onclick='window.location.href="/courses/new";'>New Course</button>
     <button <%='hidden' if session["user_id"] == nil %> onclick='window.location.href="/available";'>Available Courses</button>
     <button <%='hidden' if session["user_id"] == nil %> onclick='window.location.href="/logout";'>Logout</button>

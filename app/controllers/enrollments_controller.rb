@@ -1,21 +1,12 @@
 class EnrollmentsController < ApplicationController
 
 	def create
-		course = Course.find(params[:enrollment][:course_id])
 		user = User.find(session[:user_id])
-		@enrollment = Enrollment.new(:course_id => course.id, :user_id => user.id, :course_type => params[:course_type])
-		if @enrollment.save
-			flash[:notice] = "You have enrolled in #{course.name}!"
-			redirect_to "/home"
-		else
-			if params[:teacher_id]
-				@courses = Teacher.find(params[:teacher_id]).courses
-				@teacher = Teacher.find(params[:teacher_id])
-			else
-				@courses = Course.all
-			end
-			render "courses/index"
-		end
+		@enrollment = Enrollment.new(:course_id => params[:course_id], :user_id => user.id, :course_type => params[:course_type])
+		@enrollment.save
+		
+		
+		
 	end
 
 	def destroy

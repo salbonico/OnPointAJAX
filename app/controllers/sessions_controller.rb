@@ -22,6 +22,12 @@ class SessionsController < ApplicationController
 		redirect_to '/login'
 	end
 
+	def show
+		currentUser = User.find(session[:user_id])
+		render json: currentUser.to_json(only: [:id, :name, :admin], include: [:enrollments])
+	end
+
+
     def socialcreate
     	
     	if session[:user_id] != [] && session[:user_id] != nil
