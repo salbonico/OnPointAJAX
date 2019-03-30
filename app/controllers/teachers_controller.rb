@@ -25,7 +25,7 @@ class TeachersController < ApplicationController
     respond_to do |format|
           format.html { render :show }
           format.json { render json: @teacher, status: 200} 
-      end
+    end
   end
 
   def edit

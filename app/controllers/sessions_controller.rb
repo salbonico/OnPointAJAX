@@ -29,7 +29,6 @@ class SessionsController < ApplicationController
 
 
     def socialcreate
-    	
     	if session[:user_id] != [] && session[:user_id] != nil
     		redirect_to '/home'
     	else
@@ -49,6 +48,4 @@ class SessionsController < ApplicationController
 	  def auth
 	    request.env['omniauth.auth']
 	  end
-
-
 end

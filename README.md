@@ -1,13 +1,13 @@
 # OnPointCourses(AJAX)
 
-OnPoint Courses (AJAX)is a course management program built in order to track teachers, students and how they are related through courses.
+OnPoint Courses (AJAX)is a course management program built in order to track teachers, students and how they are related through courses and enrollments.
 
 ## Installation
 Clone the repo from https://github.com/salbonico/OnPointAJAX, run bundle install, then rails server and enter the hosting IP into your browser.
 
 
 ## Usage
- Students may either sign up using the sign up button, or via facebook authentication by clicking the "Log in with Facebook" button. Once logged in, users can use the button at the top left to navigate courses, clicking the enroll button and choosing their course type in order to enroll in courses. Once enrolled, students may click the unenroll button to unenroll. Admins can create, edit, and delete users, teachers, and courses via the navigtion panel at the top right.
+ Users may either sign up using the sign up button, or via facebook authentication by clicking the "Log in with Facebook" button. Once logged in, users can use the button at the top left to navigate courses, clicking the enroll button and choosing their course type in order to enroll in courses. Once enrolled, users may click the unenroll button to unenroll. Click on a course to see the full info about it or click on a teacher to see all courses they are teaching.
 
 ## Development
 
