@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get '/session' => 'sessions#show'
   get '/ajax' => 'home#ajax', as: 'ajax_home'
   get '/admin' => 'users#admin', as: 'user_admin'
-  get '/home' => 'users#home'
+  get '/home' => 'home#ajax'
   get '/signup' => 'users#new'
   post '/users' => 'users#create'
   get '/users/:id/edit' => 'users#edit', as: 'edit_user'

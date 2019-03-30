@@ -1,9 +1,11 @@
 var session
+
 window.onload = function(){
 	
-	attachListeners()
-	getSession()
 
+getSession()
+attachListeners()
+allCourses()
 }
 
 function attachListeners(){
@@ -17,6 +19,7 @@ function allCourses(){
 	$("#title").text("All Courses")
 	$('#courseList').empty()
 	getSession()
+
 	$.get("/courses.json", function(data) {
 		data.forEach(function(course){
 			$('#courseList').append("<a href='' class = 'course_name' id='course_name"+course.id+"'>"+course.name+"</a><br><a href='' id='teacher_id"+course.id+"'><em>" + course.teacher.name + "</em></a><p class='cdesc'>"+course.description+"</p>")
@@ -50,7 +53,7 @@ function allCourses(){
 				let posting = $.post('/enrollments/new', {"course_type" : ctype, "course_id" : course.id});
 		        posting.done(function (data) {
 		        	
-		        	const welcomemessage = new Enrollment(course.teacher.name, data.course_type, course.name, data.course_id)
+		        	const welcomemessage = new Enrollment(data.course_type, course.name, data.course_id)
 		        	welcomemessage.welcome() 
 		        	attachUnenroll(course)})
 	    	})
@@ -60,7 +63,9 @@ function allCourses(){
 
 function getSession(){
 	$.get("/session", function(data) {
-		session = data	
+		session = data
+		console.log(session)
+
 	})
 }
 
@@ -93,37 +98,44 @@ function attachEnroll(course){
 	$("#Enroll"+course.id).on('click', function(event){
 				let ctype = $(`input[name="coursetype${course.id}"]:checked`).val()
 				let posting = $.post('/enrollments/new', {"course_type" : ctype, "course_id" : course.id});
-		        posting.done(attachUnenroll(course))
+		        posting.done(function (data) {
+		        	const welcomemessage = new Enrollment(data.course_type, course.name, data.course_id)
+		        	welcomemessage.welcome() 
+		        	attachUnenroll(course)})
 	    	})
 }
 
 function showCourse(id){
 getSession()
-$.get("/courses/"+id+".json", function(data) {
-	$("#title").text(data.name)
+$.get("/courses/"+id+".json", function(course) {
+	$("#title").text(course.name)
 	$('#courseList').empty()
-	$('#courseList').append("<h3> Teacher: <a href='' id='teach'>"+data.teacher.name+"</a></h3>")
-	$('#courseList').append("<p>"+data.description+"</p>")
+	$('#courseList').append("<h4 id='course_name"+course.id+"'></h4>")
+	$('#courseList').append("<h3> Teacher: <a href='' id='teach'>"+course.teacher.name+"</a></h3>")
+	$('#courseList').append("<p>"+course.description+"</p>")
 	$("#teach").on('click', function(event){
 				event.preventDefault();
-				showTeacher(data.teacher.id)
+				showTeacher(course.teacher.id)
 			})
 
-	if (!isEnrolled(data.id)){
-		$('#courseList').append("<div id='coursetype"+ data.id +"'> <input type='radio' name='coursetype"+ data.id +"' value='classroom'> Classroom <input checked type='radio' name='coursetype"+ data.id +"' value='online'> Online<br><button id='Enroll"+ data.id +"'>Enroll</button><br></div>")
-		$("#Enroll"+data.id).on('click', function(event){
-				let ctype = $(`input[name="coursetype${data.id}"]:checked`).val()
-				let posting = $.post('/enrollments/new', {"course_type" : ctype, "course_id" : data.id});
-		        posting.done(attachUnenroll(data))
+	if (!isEnrolled(course.id)){
+		$('#courseList').append("<div id='coursetype"+ course.id +"'> <input type='radio' name='coursetype"+ course.id +"' value='classroom'> Classroom <input checked type='radio' name='coursetype"+ course.id +"' value='online'> Online<br><button id='Enroll"+ course.id +"'>Enroll</button><br></div>")
+		$("#Enroll"+course.id).on('click', function(event){
+				let ctype = $(`input[name="coursetype${course.id}"]:checked`).val()
+				let posting = $.post('/enrollments/new', {"course_type" : ctype, "course_id" : course.id});
+		        posting.done(function (data) {
+		        	const welcomemessage = new Enrollment(data.course_type, course.name, data.course_id)
+		        	welcomemessage.welcome() 
+		        	attachUnenroll(course)})
 	    })}
 	else{
-		$('#courseList').append("<button id='Unenroll"+ data.id +"'>Unenroll</button><br>")}
-		$("#Unenroll"+data.id).on('click', function(event){
-			let url = "/enrollments/"+enrollmentId(data.id)+"/unenroll"
+		$('#courseList').append("<button id='Unenroll"+ course.id +"'>Unenroll</button><br>")}
+		$("#Unenroll"+course.id).on('click', function(event){
+			let url = "/enrollments/"+enrollmentId(course.id)+"/unenroll"
  			$.ajax({
 	  			url : url,
 	  			type : 'DELETE',
-	  			complete : attachEnroll(data),
+	  			complete : attachEnroll(course),
 			})
 	})
 })}
@@ -159,14 +171,17 @@ function showTeacher(id){
 			$("#Enroll"+course.id).on('click', function(event){
 				let ctype = $(`input[name="coursetype${course.id}"]:checked`).val()
 				let posting = $.post('/enrollments/new', {"course_type" : ctype, "course_id" : course.id});
-		        posting.done(attachUnenroll(course))
+		        posting.done(function (data) {
+		        	const welcomemessage = new Enrollment(data.course_type, course.name, data.course_id)
+		        	welcomemessage.welcome() 
+		        	attachUnenroll(course)})
 	    	})
     	}) 
 	})
 }
 
-function Enrollment(teacher, type, course, course_id) {
-  this.teacher = teacher
+function Enrollment(type, course, course_id) {
+  
   this.type = type
   this.course = course
   this.course_id = course_id
@@ -174,12 +189,9 @@ function Enrollment(teacher, type, course, course_id) {
 
 Enrollment.prototype.welcome = function() {
 	temp = `#course_name${this.course_id}`
-	console.log(temp)
-    $(temp).append(`<p id="norm" class="successfully-saved"><em>${this.teacher} welcomes you to the ${this.type} version of ${this.course}!</em></p>`)
+    $(temp).append($(`<p id="norm"><em>You have enrolled in the ${this.type} version of ${this.course}!</em></p>`).hide().fadeIn(1000).delay(1000).fadeOut(1000))
 };
 
-function enrollmentSuccess(data){
-	console.log(data)
-}
+
 
 
