@@ -14,8 +14,7 @@ class EnrollmentsController < ApplicationController
 		enrollment = Enrollment.find(params[:id])
 
 		if session[:user_id] != enrollment.user_id
-			flash[:notice] = "You are not enrolled in #{course.name}!"
-			redirect_to "/courses"
+			render json: "fail", status: 304
 		else
 			course= Course.find(enrollment.course_id)
 			enrollment.destroy
