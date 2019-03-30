@@ -7,9 +7,7 @@ window.onload = function(){
 }
 
 function attachListeners(){
-	$("img").on('click', function(event) {
-  	alert("yes!")
-  })
+	
 	$("#allCourses").on('click', function(event) {
   	allCourses()
   })
@@ -50,7 +48,11 @@ function allCourses(){
 			$("#Enroll"+course.id).on('click', function(event){
 				let ctype = $(`input[name="coursetype${course.id}"]:checked`).val()
 				let posting = $.post('/enrollments/new', {"course_type" : ctype, "course_id" : course.id});
-		        posting.done(attachUnenroll(course))
+		        posting.done(function (data) {
+		        	
+		        	const welcomemessage = new Enrollment(course.teacher.name, data.course_type, course.name, data.course_id)
+		        	welcomemessage.welcome() 
+		        	attachUnenroll(course)})
 	    	})
     	}) 
 	})
@@ -73,6 +75,7 @@ function enrollmentId(courseid){
 }
 
 function attachUnenroll(course){
+
 	$("#coursetype"+course.id).replaceWith("<button id='Unenroll"+ course.id +"'>Unenroll</button>")
 	getSession()
 	$("#Unenroll"+course.id).on('click', function(event){
@@ -162,6 +165,21 @@ function showTeacher(id){
 	})
 }
 
+function Enrollment(teacher, type, course, course_id) {
+  this.teacher = teacher
+  this.type = type
+  this.course = course
+  this.course_id = course_id
+}
 
+Enrollment.prototype.welcome = function() {
+	temp = `#course_name${this.course_id}`
+	console.log(temp)
+    $(temp).append(`<p id="norm" class="successfully-saved"><em>${this.teacher} welcomes you to the ${this.type} version of ${this.course}!</em></p>`)
+};
+
+function enrollmentSuccess(data){
+	console.log(data)
+}
 
 
